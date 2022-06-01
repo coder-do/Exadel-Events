@@ -1,9 +1,11 @@
 import React from "react";
 import { Form, Input, Button, Typography } from "antd";
+import { Link } from "react-router-dom";
+import "../Register/Register.sass";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
-const Register: React.FC = () => {
+const Login: React.FC = () => {
 	const onFinish = (values: any) => {
 		console.log("Success:", values);
 	};
@@ -14,37 +16,32 @@ const Register: React.FC = () => {
 
 	return (
 		<>
-			<Title
-				level={2}
-				style={{
-					textAlign: "center",
-					marginTop: "20px",
-					marginBottom: "30px",
-				}}
-			>
-				Register
+			<Title level={2} className="title">
+				Log in
 			</Title>
 			<Form
 				name="basic"
+				className="form"
 				labelCol={{ span: 6 }}
 				wrapperCol={{ span: 14 }}
 				initialValues={{ remember: true }}
+				labelAlign="left"
 				onFinish={onFinish}
 				onFinishFailed={onFinishFailed}
 				autoComplete="off"
-				style={{ width: "500px", margin: "0 auto" }}
 			>
 				<Form.Item
-					label="Username"
-					name="username"
+					label="Email"
+					name="email"
 					rules={[
 						{
 							required: true,
-							message: "Please input your username!",
+							type: "email",
+							message: "Please input correct email!",
 						},
 					]}
 				>
-					<Input />
+					<Input type="email" placeholder="example@example.com" />
 				</Form.Item>
 
 				<Form.Item
@@ -57,16 +54,19 @@ const Register: React.FC = () => {
 						},
 					]}
 				>
-					<Input.Password />
+					<Input.Password placeholder="••••••••" />
 				</Form.Item>
 
+				<Text className="text">
+					Don't have an account?{" "}
+					<Link to="/auth/register" className="link">
+						Register
+					</Link>
+				</Text>
+
 				<Form.Item wrapperCol={{ offset: 7, span: 10 }}>
-					<Button
-						type="primary"
-						htmlType="submit"
-						style={{ display: "block", margin: "0 auto" }}
-					>
-						Submit
+					<Button type="primary" htmlType="submit" className="btn">
+						Log in
 					</Button>
 				</Form.Item>
 			</Form>
@@ -74,4 +74,4 @@ const Register: React.FC = () => {
 	);
 };
 
-export default Register;
+export default Login;

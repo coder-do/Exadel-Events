@@ -3,17 +3,19 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Register from "./components/Register";
+import Register from "./components/Register/Register";
 
-import "./index.css";
+import "./index.sass";
 import "antd/dist/antd.css";
-import Login from "./components/Login";
+import Login from "./components/Login/Login";
+import MainHeader from "./components/Header/Header";
 
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement
 );
 root.render(
 	<BrowserRouter>
+		<MainHeader></MainHeader>
 		<Routes>
 			<Route path="/" element={<App />} />
 			<Route path="auth">
