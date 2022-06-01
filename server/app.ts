@@ -6,9 +6,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
-import indexRouter from "./routes/index";
-import usersRouter from "./routes/users";
-import User from './models/users';
+import User from './models/user.models';
+import { usersRouter } from "./routes/user.routes";
 
 dotenv.config();
 
@@ -20,8 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(path.resolve(), "public")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/auth", usersRouter);
 
 mongoose.connect(process.env.MONGODB_URL as string)
 	.then(async () => {
