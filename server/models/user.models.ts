@@ -1,31 +1,19 @@
 import { Schema, model } from 'mongoose';
-import Event, { IEvent } from './event.models';
-
-interface IUser {
-	name: string,
-	email: string,
-	password: string,
-	role: 'admin' | 'user',
-	events: IEvent[],
-};
+import Event from './event.models';
+import { IUser } from 'interfaces/user.interfaces';
 
 const userSchema = new Schema<IUser>({
 	name: {
-		type: String,
-		required: true
+		type: String
 	},
 	email: {
-		type: String,
-		unique: true,
-		required: true
+		type: String
 	},
 	password: {
-		type: String,
-		required: true
+		type: String
 	},
 	role: {
-		type: String,
-		required: true
+		type: String
 	},
 	events: [Event.schema],
 });

@@ -1,38 +1,24 @@
 import { Schema, model } from 'mongoose';
-
-export interface IEvent {
-	name: string,
-	description: string,
-	start_date: Date,
-	end_date: Date,
-	type: 'online' | 'offline',
-	address: string,
-};
+import { IEvent } from 'interfaces/event.interfaces';
 
 const eventSchema = new Schema<IEvent>({
 	name: {
-		type: String,
-		required: true
+		type: String
 	},
 	description: {
-		type: String,
-		required: true
+		type: String
 	},
 	start_date: {
-		type: Date,
-		required: true
+		type: Date
 	},
 	end_date: {
-		type: Date,
-		required: true
+		type: Date
 	},
 	type: {
-		type: String,
-		required: true
+		type: String
 	},
 	address: {
-		type: String,
-		required: false
+		type: String
 	},
 });
 

@@ -1,17 +1,41 @@
-import React from "react";
-import { Form, Input, Button, Typography } from "antd";
-import { Link } from "react-router-dom";
-import "../Register/Register.sass";
+import React, { useContext, useEffect } from "react";
+import { Form, Input, Button, Typography, message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { axios_instance } from "utils/axios";
+import { AppContext } from "context/context";
+import "components/Register/Register.sass";
 
 const { Title, Text } = Typography;
 
 const Login: React.FC = () => {
-	const onFinish = (values: any) => {
-		console.log("Success:", values);
+	const navigate = useNavigate();
+	const { isLoggedIn, setIsLoggedIn } = useContext(AppContext);
+
+	const checkAuthState = () => {
+		if (isLoggedIn) {
+			navigate("/");
+		}
 	};
 
-	const onFinishFailed = (errorInfo: any) => {
-		console.log("Failed:", errorInfo);
+	useEffect(checkAuthState, [isLoggedIn]);
+
+	const onFinish = (values: { email: string; password: string }) => {
+		axios_instance
+			.post("auth/login", values)
+			.then((res) => {
+				localStorage.setItem("token", res.data.session.token);
+				localStorage.setItem("username", res.data.session.user.name);
+				localStorage.setItem("role", res.data.session.user.role);
+				localStorage.setItem(
+					"expiresIn",
+					res.data.session.cookie.expires
+				);
+				setIsLoggedIn(true);
+				navigate("/");
+			})
+			.catch((err) => {
+				message.error(err.response.data.message);
+			});
 	};
 
 	return (
@@ -27,7 +51,6 @@ const Login: React.FC = () => {
 				initialValues={{ remember: true }}
 				labelAlign="left"
 				onFinish={onFinish}
-				onFinishFailed={onFinishFailed}
 				autoComplete="off"
 			>
 				<Form.Item
@@ -63,7 +86,6 @@ const Login: React.FC = () => {
 						Register
 					</Link>
 				</Text>
-
 				<Form.Item wrapperCol={{ offset: 7, span: 10 }}>
 					<Button type="primary" htmlType="submit" className="btn">
 						Log in
