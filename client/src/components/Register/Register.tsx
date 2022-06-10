@@ -1,17 +1,44 @@
-import React from "react";
-import { Form, Input, Button, Typography } from "antd";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { Form, Input, Button, Typography, message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { AppContext } from "context/context";
 import "./Register.sass";
+import { axios_instance } from "utils/axios";
 
 const { Title, Text } = Typography;
 
 const Register: React.FC = () => {
+	const navigate = useNavigate();
+	const { isLoggedIn } = useContext(AppContext);
+
+	const checkAuthState = () => {
+		if (isLoggedIn) {
+			navigate("/");
+		}
+	};
+
+	useEffect(checkAuthState, [isLoggedIn]);
+
 	const onFinish = (values: any) => {
-		console.log("Success:", values);
+		const finalData = {
+			name: values.username,
+			email: values.email,
+			password: values.password,
+			role: "user",
+		};
+		axios_instance
+			.post("auth/register", finalData)
+			.then(() => {
+				message.success("Account created successfully!");
+				navigate("/auth/login");
+			})
+			.catch((err) => {
+				message.error(err.response.data.errors[0].msg);
+			});
 	};
 
 	const onFinishFailed = (errorInfo: any) => {
-		console.log("Failed:", errorInfo);
+		message.error("Please fill all required fields!");
 	};
 
 	return (
