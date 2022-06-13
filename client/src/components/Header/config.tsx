@@ -17,13 +17,13 @@ export const menuItems: IMenuItem[] = [
 		link: "/",
 	},
 	{
-		key: "1",
+		key: "2",
 		label: "Log in",
 		canBeHidden: true,
 		link: "/auth/login",
 	},
 	{
-		key: "2",
+		key: "3",
 		label: "Sign up",
 		canBeHidden: true,
 		link: "/auth/register",
