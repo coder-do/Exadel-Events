@@ -2,8 +2,8 @@ import React, { useContext, useEffect } from "react";
 import { Form, Input, Button, Typography, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "context/context";
-import "./Register.sass";
 import { axios_instance } from "utils/axios";
+import "./style.sass";
 
 const { Title, Text } = Typography;
 

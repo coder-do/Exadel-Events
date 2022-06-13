@@ -3,7 +3,7 @@ import { Form, Input, Button, Typography, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { axios_instance } from "utils/axios";
 import { AppContext } from "context/context";
-import "components/Register/Register.sass";
+import "components/Register/style.sass";
 
 const { Title, Text } = Typography;
 

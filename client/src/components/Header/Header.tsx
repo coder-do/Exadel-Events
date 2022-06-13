@@ -4,7 +4,7 @@ import { Layout, Menu, Avatar, Dropdown, Typography } from "antd";
 import { IMenuItem, menuItems } from "./config";
 import { AppContext } from "context/context";
 import { UserOutlined } from "@ant-design/icons";
-import "./Header.sass";
+import "./style.sass";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -45,20 +45,43 @@ const MainHeader: React.FC = () => {
 						</Menu.Item>
 					))}
 					{isLoggedIn && (
-						<Menu.Item key="dsfds" className="menu_item">
-							<Dropdown overlay={menu} placement="bottomRight">
-								<a onClick={(e) => e.preventDefault()}>
-									<Text className="username">
-										{localStorage.getItem("username")}
-									</Text>
-									<Avatar
-										size="large"
-										className="avatar"
-										icon={<UserOutlined />}
-									/>
-								</a>
-							</Dropdown>
-						</Menu.Item>
+						<>
+							<Menu.Item
+								hidden={
+									localStorage.getItem("role") !== "admin"
+								}
+								key="fwe"
+								className="menu_item"
+							>
+								<Link to="events/add">Add event</Link>
+							</Menu.Item>
+							<Menu.Item
+								hidden={
+									localStorage.getItem("role") === "admin"
+								}
+								key="fwg"
+								className="menu_item"
+							>
+								<Link to="events/my">My Events</Link>
+							</Menu.Item>
+							<Menu.Item key="dsfds" className="menu_item">
+								<Dropdown
+									overlay={menu}
+									placement="bottomRight"
+								>
+									<a onClick={(e) => e.preventDefault()}>
+										<Text className="username">
+											{localStorage.getItem("username")}
+										</Text>
+										<Avatar
+											size="large"
+											className="avatar"
+											icon={<UserOutlined />}
+										/>
+									</a>
+								</Dropdown>
+							</Menu.Item>
+						</>
 					)}
 				</Menu>
 			</Header>
