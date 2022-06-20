@@ -49,7 +49,7 @@ const Register: React.FC = () => {
 			<Form
 				name="basic"
 				className="form"
-				labelCol={{ span: 7 }}
+				labelCol={{ span: 6 }}
 				wrapperCol={{ span: 14 }}
 				labelAlign="left"
 				initialValues={{ remember: true }}
@@ -138,7 +138,12 @@ const Register: React.FC = () => {
 				</Text>
 
 				<Form.Item wrapperCol={{ offset: 7, span: 10 }}>
-					<Button type="primary" htmlType="submit" className="btn">
+					<Button
+						type="primary"
+						htmlType="submit"
+						className="btn"
+						id="register"
+					>
 						Sign up
 					</Button>
 				</Form.Item>

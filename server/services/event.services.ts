@@ -48,7 +48,7 @@ export const addEvent = async (userId: string, event: IEvent, role: string): Pro
 		} else {
 			const user = await User.findOne({ _id: userId });
 			if (user!.events.find((ev: IEvent) => ev?._id?.toString() === event._id?.toString())) {
-				throw 'Event already exists';
+				throw 'You have already subscribed to this event! Choose another one!';
 			}
 			user!.events.push(event);
 			await user!.save();

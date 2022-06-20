@@ -87,7 +87,12 @@ const Login: React.FC = () => {
 					</Link>
 				</Text>
 				<Form.Item wrapperCol={{ offset: 7, span: 10 }}>
-					<Button type="primary" htmlType="submit" className="btn">
+					<Button
+						type="primary"
+						htmlType="submit"
+						className="btn"
+						id="login"
+					>
 						Log in
 					</Button>
 				</Form.Item>
