@@ -1,10 +1,11 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Layout, Menu, Avatar, Dropdown, Typography } from "antd";
+import { Layout, Menu, Avatar, Dropdown, Typography, message } from "antd";
 import { IMenuItem, menuItems } from "./config";
 import { AppContext } from "context/context";
 import { UserOutlined } from "@ant-design/icons";
 import "./style.sass";
+import { axios_instance } from "utils/axios";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -14,9 +15,16 @@ const MainHeader: React.FC = () => {
 	const navigate = useNavigate();
 
 	const logout = () => {
-		localStorage.clear();
-		setIsLoggedIn(false);
-		navigate("/");
+		axios_instance
+			.post("/auth/logout")
+			.then(() => {
+				localStorage.clear();
+				setIsLoggedIn(false);
+				navigate("/");
+			})
+			.catch((err) => {
+				message.error(err.message);
+			});
 	};
 
 	const menu = (

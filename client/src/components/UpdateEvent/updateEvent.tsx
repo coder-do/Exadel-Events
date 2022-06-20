@@ -11,13 +11,14 @@ import {
 import moment from "moment";
 import { axios_instance } from "utils/axios";
 import { IEvent } from "interfaces/event";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const { TextArea } = Input;
 const { Title } = Typography;
 
 const UpdateEvent = () => {
 	const params = useParams();
+	const navigate = useNavigate();
 	const [form] = Form.useForm();
 	const [type, setType] = useState("");
 	const [event, setEvent] = useState<IEvent>();
@@ -57,6 +58,7 @@ const UpdateEvent = () => {
 			.then((res) => {
 				message.success("Event updated successfully");
 				setLoading(false);
+				navigate("/");
 			})
 			.catch((err) => {
 				message.error(err.message);
@@ -120,7 +122,7 @@ const UpdateEvent = () => {
 						loading={loading}
 						className="submit_btn"
 					>
-						Add Event
+						Update Event
 					</Button>
 				</Form.Item>
 			</Form>

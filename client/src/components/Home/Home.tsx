@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Row, Spin, Space, message, Typography } from "antd";
+import { Row, Spin, Space, message, Typography, Pagination } from "antd";
 import Event from "components/Event/Event";
 import { AppContext } from "context/context";
 import { axios_instance } from "utils/axios";
@@ -11,11 +11,16 @@ const { Title, Text } = Typography;
 
 const Home: React.FC = () => {
 	const navigate = useNavigate();
-	const { isLoggedIn } = useContext(AppContext);
+	const { isLoggedIn, setIsLoggedIn } = useContext(AppContext);
 	const [events, setEvents] = useState<IEvent[]>([]);
+	const [subscribedEvents, setSubscribedEvents] = useState<IEvent[]>([]);
 	const [updateEvents, setUpdateEvents] = useState<boolean>(false);
+	const [minValue, setMinValue] = useState<number>(0);
+	const [maxValue, setMaxValue] = useState<number>(1);
+	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [loading, setLoading] = useState<boolean>(true);
 	const role = localStorage.getItem("role") === "admin";
+	const itemsPerpage = 6;
 
 	const getEvents = () => {
 		if (isLoggedIn) {
@@ -27,19 +32,41 @@ const Home: React.FC = () => {
 				})
 				.catch((err) => {
 					if (err.response.status === 401) {
-						localStorage.clear();
-						message.error("Session expired. Please login again.");
-						navigate("/auth/login");
+						axios_instance
+							.post("/auth/logout")
+							.then(() => {
+								localStorage.clear();
+								setIsLoggedIn(false);
+								message.error(
+									"Session expired. Please login again."
+								);
+								navigate("/auth/login");
+							})
+							.catch((err) => {
+								message.error(err.message);
+							});
 					}
 					message.error(err.message);
 				});
+			getUserEvents();
 		} else {
-			navigate("/auth/login");
+			setLoading(false);
+			setIsLoggedIn(false);
 		}
 	};
 
+	const getUserEvents = () => {
+		axios_instance
+			.get("events/my")
+			.then((res) => {
+				setSubscribedEvents(res.data.events.events);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	const subscribeEventHandler = (event: IEvent) => {
-		console.log("Subscribe event", event);
 		axios_instance
 			.post("events/add", event)
 			.then(() => {
@@ -52,11 +79,19 @@ const Home: React.FC = () => {
 
 	useEffect(() => {
 		isLoggedIn && getEvents();
-	}, []);
+		handleChange(1);
+	}, [isLoggedIn]);
 
 	useEffect(() => {
-		getEvents();
+		updateEvents && getEvents();
 	}, [updateEvents]);
+
+	const handleChange = (page: number) => {
+		setMinValue((page - 1) * itemsPerpage);
+		setMaxValue(page * itemsPerpage);
+		setCurrentPage(page);
+		isLoggedIn && getUserEvents();
+	};
 
 	return (
 		<>
@@ -101,18 +136,37 @@ const Home: React.FC = () => {
 					)}
 					<Row>
 						{events.length > 0 &&
-							events.map((event: IEvent) => (
-								<Event
-									key={event._id}
-									event={event}
-									update={updateEvents}
-									updateEvent={setUpdateEvents}
-									subscribeEventhandler={
-										subscribeEventHandler
-									}
-								/>
-							))}
+							events
+								.slice(minValue, maxValue)
+								.map((event: IEvent) => (
+									<Event
+										key={event._id}
+										event={event}
+										update={updateEvents}
+										updateEvent={setUpdateEvents}
+										subscribed={
+											subscribedEvents.length > 0 &&
+											subscribedEvents.some((e) => {
+												return (
+													e._id?.toString() ===
+													event._id?.toString()
+												);
+											})
+										}
+										subscribeEventhandler={
+											subscribeEventHandler
+										}
+									/>
+								))}
 					</Row>
+					<Pagination
+						responsive
+						className="pagination"
+						onChange={handleChange}
+						current={currentPage}
+						total={events && events.length}
+						pageSize={itemsPerpage}
+					/>
 				</>
 			)}
 		</>

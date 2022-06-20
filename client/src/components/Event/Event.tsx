@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Card, Col, Dropdown, Menu, message, Popconfirm } from "antd";
 import { axios_instance } from "utils/axios";
 import { IEvent } from "interfaces/event";
 import "./style.sass";
+import moment from "moment";
 
 const { Meta } = Card;
 
@@ -12,6 +13,7 @@ interface IEventProps {
 	update: boolean;
 	updateEvent: (value: boolean) => void;
 	subscribeEventhandler: (event: IEvent) => void;
+	subscribed?: boolean;
 	subscriber?: boolean;
 }
 
@@ -20,17 +22,19 @@ const Event: React.FC<IEventProps> = ({
 	update,
 	updateEvent,
 	subscriber,
+	subscribed,
 	subscribeEventhandler,
 }): JSX.Element => {
 	const navigate = useNavigate();
 	const role = localStorage.getItem("role") === "admin";
+	const [sub, setSub] = useState<boolean>(subscribed || false);
 
 	const confirm = (e: React.MouseEvent<HTMLElement> | undefined) => {
 		e?.preventDefault();
 		axios_instance
 			.delete(`events/delete/${event._id}`)
 			.then(() => {
-				updateEvent(!update);
+				updateEvent(true);
 				message.success("Event deleted");
 			})
 			.catch((err) => {
@@ -56,7 +60,7 @@ const Event: React.FC<IEventProps> = ({
 				{
 					label: (
 						<Popconfirm
-							title="Are you sure to delete this task?"
+							title="Are you sure you want delete this event?"
 							onConfirm={confirm}
 							onCancel={() => {}}
 							okText="Yes"
@@ -89,10 +93,24 @@ const Event: React.FC<IEventProps> = ({
 					<Button
 						type="primary"
 						danger={subscriber}
-						disabled={role}
-						onClick={() => subscribeEventhandler(event!)}
+						disabled={
+							role ||
+							sub ||
+							subscribed ||
+							moment(event.start_date).isBefore(moment())
+						}
+						onClick={() => {
+							subscribeEventhandler(event!);
+							setSub(true);
+						}}
 					>
-						{subscriber ? "Unsubscribe" : "Subscribe"}
+						{moment(event.start_date).isBefore(moment())
+							? "Event Expired"
+							: sub || subscribed
+							? "Subscribed"
+							: subscriber
+							? "Unsubscribe"
+							: "Subscribe"}
 					</Button>,
 					<Dropdown
 						overlay={menu}
