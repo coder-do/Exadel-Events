@@ -84,7 +84,7 @@ const Event: React.FC<IEventProps> = ({
 				hoverable
 				actions={[
 					<Link
-						to={`/events/${event._id}${
+						to={`/events/details/${event._id}${
 							subscriber ? "?subscriber=true" : ""
 						}`}
 					>

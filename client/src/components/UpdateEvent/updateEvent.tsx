@@ -12,6 +12,7 @@ import moment from "moment";
 import { axios_instance } from "utils/axios";
 import { IEvent } from "interfaces/event";
 import { useNavigate, useParams } from "react-router-dom";
+import Map from "components/Map/Map";
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -20,7 +21,8 @@ const UpdateEvent = () => {
 	const params = useParams();
 	const navigate = useNavigate();
 	const [form] = Form.useForm();
-	const [type, setType] = useState("");
+	const [type, setType] = useState<string>("");
+	const [address, setAddress] = useState<string>("");
 	const [event, setEvent] = useState<IEvent>();
 	const [loading, setLoading] = useState<boolean>(false);
 
@@ -31,7 +33,7 @@ const UpdateEvent = () => {
 			type: event?.type,
 			start_date: moment(event?.start_date),
 			end_date: moment(event?.end_date),
-			address: event?.address || "",
+			address: event?.address || address,
 		});
 	};
 
@@ -50,7 +52,7 @@ const UpdateEvent = () => {
 			type: data.type,
 		};
 		if (data.address) {
-			finalData.address = data.address;
+			finalData.address = address;
 		}
 
 		axios_instance
@@ -72,6 +74,8 @@ const UpdateEvent = () => {
 			.then((res) => {
 				setEvent(res.data.event);
 				setFormInitialValues();
+				setType(res.data.event.type);
+				setAddress(res.data.event.address);
 			})
 			.catch((err) => {
 				message.error(err.message);
@@ -112,8 +116,16 @@ const UpdateEvent = () => {
 				<Form.Item name="end_date" label="End Date">
 					<DatePicker />
 				</Form.Item>
-				<Form.Item name="address" label="Address">
-					<Input disabled={type === "online"} placeholder="address" />
+				<Form.Item
+					name="address"
+					label="Address"
+					initialValue={address}
+				>
+					<Input
+						disabled={type === "online"}
+						placeholder="address"
+						value={address}
+					/>
 				</Form.Item>
 				<Form.Item>
 					<Button
@@ -126,6 +138,9 @@ const UpdateEvent = () => {
 					</Button>
 				</Form.Item>
 			</Form>
+			{type === "offline" && (
+				<Map address={address} setAddress={setAddress} form={form} />
+			)}
 		</>
 	);
 };

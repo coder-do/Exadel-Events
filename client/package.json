@@ -16,6 +16,7 @@
 		"@types/react-router-dom": "^5.3.3",
 		"antd": "^4.20.7",
 		"axios": "^0.27.2",
+		"mapbox-gl": "^2.9.0",
 		"moment": "^2.29.3",
 		"puppeteer": "^14.4.0",
 		"react": "^18.1.0",
@@ -50,6 +51,7 @@
 		]
 	},
 	"devDependencies": {
+		"@types/mapbox-gl": "^2.7.3",
 		"sass": "^1.52.1"
 	},
 	"proxy": "http://localhost:4000"

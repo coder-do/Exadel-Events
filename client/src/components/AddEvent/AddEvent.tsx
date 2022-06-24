@@ -8,15 +8,19 @@ import {
 	Typography,
 	message,
 } from "antd";
+import { useNavigate } from "react-router-dom";
 import { axios_instance } from "utils/axios";
 import { IEvent } from "interfaces/event";
+import Map from "components/Map/Map";
 
 const { TextArea } = Input;
 const { Title } = Typography;
 
 const AddEvent = () => {
 	const [form] = Form.useForm();
-	const [type, setType] = useState("");
+	const navigate = useNavigate();
+	const [type, setType] = useState<string>("");
+	const [address, setAddress] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const onSubmit = (values: any) => {
@@ -32,8 +36,8 @@ const AddEvent = () => {
 			end_date: (data.end_date as any)._d.toISOString(),
 			type: type,
 		};
-		if (data.address) {
-			finalData.address = data.address;
+		if (data.address && type === "offline") {
+			finalData.address = address;
 		}
 
 		axios_instance
@@ -42,6 +46,7 @@ const AddEvent = () => {
 				message.success("Event added successfully");
 				setLoading(false);
 				form.resetFields();
+				navigate("/");
 			})
 			.catch((err) => {
 				message.error(err.message);
@@ -79,8 +84,16 @@ const AddEvent = () => {
 				<Form.Item name="end_date" label="End Date">
 					<DatePicker />
 				</Form.Item>
-				<Form.Item name="address" label="Address">
-					<Input disabled={type === "online"} placeholder="address" />
+				<Form.Item
+					name="address"
+					label="Address"
+					initialValue={address}
+				>
+					<Input
+						disabled={type === "online"}
+						placeholder="address"
+						value={address}
+					/>
 				</Form.Item>
 				<Form.Item>
 					<Button
@@ -93,6 +106,9 @@ const AddEvent = () => {
 					</Button>
 				</Form.Item>
 			</Form>
+			{type === "offline" && (
+				<Map address={address} setAddress={setAddress} form={form} />
+			)}
 		</>
 	);
 };
