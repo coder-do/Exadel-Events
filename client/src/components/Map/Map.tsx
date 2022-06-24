@@ -35,19 +35,13 @@ const Map: React.FC<IMapProps> = ({ address, setAddress, form }) => {
 			setLat(coordinates.lat);
 			setZoom(coordinates.zoom);
 		}
-		let map = !address
-			? new mapboxgl.Map({
-					container: mapContainerRef.current,
-					style: "mapbox://styles/mapbox/streets-v11",
-					center: [lng, lat],
-					zoom: zoom,
-			  })
-			: new mapboxgl.Map({
-					container: mapContainerRef.current,
-					style: "mapbox://styles/mapbox/streets-v11",
-					center: [coordinates.lng, coordinates.lat],
-					zoom: coordinates.zoom,
-			  });
+
+		let map = new mapboxgl.Map({
+			container: mapContainerRef.current,
+			style: "mapbox://styles/mapbox/streets-v11",
+			center: !address ? [lng, lat] : [coordinates.lng, coordinates.lat],
+			zoom: zoom,
+		});
 
 		const path: string[] = location.pathname.split("/");
 		if (
