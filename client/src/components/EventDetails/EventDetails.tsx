@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Descriptions, message, Space, Spin } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Descriptions, message, Space, Spin } from "antd";
 import { AppContext } from "context/context";
 import { axios_instance } from "utils/axios";
 import { IEvent } from "interfaces/event";
+import Map from "components/Map/Map";
 import "./style.sass";
 
 const EventDetails: React.FC = () => {
@@ -69,6 +70,7 @@ const EventDetails: React.FC = () => {
 					)}
 				</Descriptions>
 			)}
+			{event?.address && <Map address={event?.address} />}
 		</>
 	);
 };

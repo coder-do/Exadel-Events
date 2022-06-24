@@ -31,7 +31,7 @@ const App: React.FC = () => {
 					<Route path="add" element={<AddEvent />} />
 					<Route path="my" element={<UserEvents />} />
 					<Route path="update/:id" element={<UpdateEvent />} />
-					<Route path=":id" element={<EventDetails />} />
+					<Route path="details/:id" element={<EventDetails />} />
 				</Route>
 				<Route path="auth">
 					<Route path="register" element={<Register />} />
