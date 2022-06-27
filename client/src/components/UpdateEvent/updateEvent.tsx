@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
 	Form,
 	Input,
@@ -8,10 +10,8 @@ import {
 	Typography,
 	message,
 } from "antd";
-import moment from "moment";
 import { axios_instance } from "utils/axios";
 import { IEvent } from "interfaces/event";
-import { useNavigate, useParams } from "react-router-dom";
 import Map from "components/Map/Map";
 
 const { TextArea } = Input;
@@ -57,7 +57,7 @@ const UpdateEvent = () => {
 
 		axios_instance
 			.put("events/update", finalData)
-			.then((res) => {
+			.then(() => {
 				message.success("Event updated successfully");
 				setLoading(false);
 				navigate("/");

@@ -4,8 +4,8 @@ import { Layout, Menu, Avatar, Dropdown, Typography, message } from "antd";
 import { IMenuItem, menuItems } from "./config";
 import { AppContext } from "context/context";
 import { UserOutlined } from "@ant-design/icons";
+import { logout } from "utils/authHelpers";
 import "./style.sass";
-import { axios_instance } from "utils/axios";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -14,24 +14,19 @@ const MainHeader: React.FC = () => {
 	const { isLoggedIn, setIsLoggedIn } = React.useContext(AppContext);
 	const navigate = useNavigate();
 
-	const logout = () => {
-		axios_instance
-			.post("/auth/logout")
-			.then(() => {
-				localStorage.clear();
-				setIsLoggedIn(false);
-				navigate("/");
-			})
-			.catch((err) => {
-				message.error(err.message);
-			});
-	};
-
 	const menu = (
 		<Menu
 			items={[
 				{
-					label: <span onClick={logout}>Log out</span>,
+					label: (
+						<span
+							onClick={() =>
+								logout({ navigate, setIsLoggedIn, message })
+							}
+						>
+							Log out
+						</span>
+					),
 					key: "7",
 				},
 			]}

@@ -11,8 +11,8 @@ import Register from "components/Register/Register";
 import EventDetails from "components/EventDetails/EventDetails";
 import UserEvents from "components/UserEvents/UserEvents";
 import { loginStatus } from "utils/loginStatus";
-import "./App.sass";
 import UpdateEvent from "components/UpdateEvent/updateEvent";
+import "./App.sass";
 
 const App: React.FC = () => {
 	const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false);

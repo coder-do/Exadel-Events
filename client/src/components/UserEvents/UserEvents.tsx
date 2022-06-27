@@ -5,13 +5,14 @@ import { message, Row, Space, Spin, Typography } from "antd";
 import { AppContext } from "context/context";
 import { IEvent } from "interfaces/event";
 import Event from "components/Event/Event";
+import { logout } from "utils/authHelpers";
 import "./style.sass";
 
 const { Title, Text } = Typography;
 
 const UserEvents: React.FC = () => {
 	const navigate = useNavigate();
-	const { isLoggedIn } = useContext(AppContext);
+	const { isLoggedIn, setIsLoggedIn } = useContext(AppContext);
 	const [events, setEvents] = useState<IEvent[]>([]);
 	const [updateEvents, setUpdateEvents] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(true);
@@ -26,9 +27,7 @@ const UserEvents: React.FC = () => {
 				})
 				.catch((err) => {
 					if (err.response.status === 401) {
-						localStorage.clear();
-						message.error("Session expired. Please login again.");
-						navigate("/auth/login");
+						logout({ navigate, setIsLoggedIn, message });
 					}
 					message.error(err.message);
 				});
@@ -75,9 +74,8 @@ const UserEvents: React.FC = () => {
 							events.map((event: IEvent) => (
 								<Event
 									subscriber
-									key={event._id}
 									event={event}
-									update={updateEvents}
+									key={event._id}
 									updateEvent={setUpdateEvents}
 									subscribeEventhandler={
 										subscribeEventHandler

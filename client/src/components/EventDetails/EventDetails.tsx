@@ -5,12 +5,13 @@ import { AppContext } from "context/context";
 import { axios_instance } from "utils/axios";
 import { IEvent } from "interfaces/event";
 import Map from "components/Map/Map";
+import { logout } from "utils/authHelpers";
 import "./style.sass";
 
 const EventDetails: React.FC = () => {
+	const { isLoggedIn, setIsLoggedIn } = useContext(AppContext);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [event, setEvent] = useState<IEvent>();
-	const { isLoggedIn } = useContext(AppContext);
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
 	const params = useParams();
@@ -28,9 +29,7 @@ const EventDetails: React.FC = () => {
 				})
 				.catch((err) => {
 					if (err.response.status === 401) {
-						localStorage.clear();
-						message.error("Session expired. Please login again.");
-						navigate("/auth/login");
+						logout({ navigate, setIsLoggedIn, message });
 					}
 					message.error(err.message);
 				});
