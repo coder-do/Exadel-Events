@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import moment from "moment";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Card, Col, Dropdown, Menu, message, Popconfirm } from "antd";
 import { axios_instance } from "utils/axios";
 import { IEvent } from "interfaces/event";
 import "./style.sass";
-import moment from "moment";
 
 const { Meta } = Card;
 
 interface IEventProps {
 	event: IEvent;
-	update: boolean;
 	updateEvent: (value: boolean) => void;
 	subscribeEventhandler: (event: IEvent) => void;
 	subscribed?: boolean;
@@ -19,7 +18,6 @@ interface IEventProps {
 
 const Event: React.FC<IEventProps> = ({
 	event,
-	update,
 	updateEvent,
 	subscriber,
 	subscribed,

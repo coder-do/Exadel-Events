@@ -37,7 +37,7 @@ const Register: React.FC = () => {
 			});
 	};
 
-	const onFinishFailed = (errorInfo: any) => {
+	const onFinishFailed = () => {
 		message.error("Please fill all required fields!");
 	};
 
