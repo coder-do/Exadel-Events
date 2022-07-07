@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
 	Form,
 	Input,
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { axios_instance } from "utils/axios";
 import { IEvent } from "interfaces/event";
 import Map from "components/Map/Map";
+import "./style.sass";
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -29,29 +30,34 @@ const AddEvent = () => {
 	};
 
 	const addEvent = (data: IEvent) => {
-		const finalData: IEvent = {
-			name: data.name,
-			description: data.description,
-			start_date: (data.start_date as any)._d.toISOString(),
-			end_date: (data.end_date as any)._d.toISOString(),
-			type: type,
-		};
-		if (data.address && type === "offline") {
-			finalData.address = address;
-		}
+		try {
+			const finalData: IEvent = {
+				name: data.name,
+				description: data.description,
+				start_date: (data.start_date as any)._d.toISOString(),
+				end_date: (data.end_date as any)._d.toISOString(),
+				type: type,
+			};
+			if (data.address && type === "offline") {
+				finalData.address = address;
+			}
 
-		axios_instance
-			.post("events/add", finalData)
-			.then((res) => {
-				message.success("Event added successfully");
-				setLoading(false);
-				form.resetFields();
-				navigate("/");
-			})
-			.catch((err) => {
-				message.error(err.message);
-				setLoading(false);
-			});
+			axios_instance
+				.post("events/add", finalData)
+				.then((res) => {
+					message.success("Event added successfully");
+					setLoading(false);
+					form.resetFields();
+					navigate("/");
+				})
+				.catch((err) => {
+					message.error(err.response.data.errors[0].msg);
+					setLoading(false);
+				});
+		} catch (err) {
+			message.error("Please fill all required fields");
+			setLoading(false);
+		}
 	};
 
 	return (

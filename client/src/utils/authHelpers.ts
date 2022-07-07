@@ -14,9 +14,6 @@ export const logout = ({ navigate, setIsLoggedIn, message }: LogoutProps) => {
 		.then(() => {
 			localStorage.clear();
 			setIsLoggedIn(false);
-			message.error(
-				"Session expired. Please login again."
-			);
 			navigate("/auth/login");
 		})
 		.catch((err) => {

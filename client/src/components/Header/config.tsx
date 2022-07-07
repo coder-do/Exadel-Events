@@ -12,7 +12,7 @@ export interface IMenuItem {
 export const menuItems: IMenuItem[] = [
 	{
 		key: "0",
-		icon: <img width={150} src={HomeIcon} alt="Home" />,
+		icon: <img width={150} height={28} src={HomeIcon} alt="Home" />,
 		canBeHidden: false,
 		link: "/",
 	},

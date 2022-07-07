@@ -13,6 +13,7 @@ import {
 import { axios_instance } from "utils/axios";
 import { IEvent } from "interfaces/event";
 import Map from "components/Map/Map";
+import "./style.sass";
 
 const { TextArea } = Input;
 const { Title } = Typography;
