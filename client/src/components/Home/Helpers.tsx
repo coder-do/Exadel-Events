@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { Space, Spin, Typography } from "antd";
 import { IEvent } from "interfaces/event";
@@ -12,7 +12,7 @@ interface EventsTitleProps {
 }
 
 export const Helpers = {
-	MainTiTle: () => (
+	MainTiTle: memo(() => (
 		<>
 			<Text className="home_title">
 				First, you need to{" "}
@@ -23,8 +23,8 @@ export const Helpers = {
 				</Text>
 			</Text>
 		</>
-	),
-	AdminTitle: () => (
+	)),
+	AdminTitle: memo(() => (
 		<>
 			<Text className="home_title">
 				Hello, admin! You can add new events here:
@@ -35,8 +35,8 @@ export const Helpers = {
 				</Text>
 			</Text>
 		</>
-	),
-	EventsTitle: ({ role, loading, events }: EventsTitleProps) => (
+	)),
+	EventsTitle: memo(({ role, loading, events }: EventsTitleProps) => (
 		<>
 			<Title level={2} className="main_title">
 				{role ? "All" : "Exadel"} Events
@@ -45,7 +45,7 @@ export const Helpers = {
 				<Text className="empty">There are no events yet...</Text>
 			)}
 		</>
-	),
+	)),
 	Spinner: () => (
 		<>
 			<Space className="space">
