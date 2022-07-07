@@ -1,18 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { message } from "antd";
+import { message, Spin } from "antd";
 import { AppContext } from "context/context";
 import Home from "components/Home/Home";
-import NotFound from "components/404/404";
-import Login from "components/Login/Login";
 import MainHeader from "components/Header/Header";
-import AddEvent from "components/AddEvent/AddEvent";
-import Register from "components/Register/Register";
-import EventDetails from "components/EventDetails/EventDetails";
-import UserEvents from "components/UserEvents/UserEvents";
 import { loginStatus } from "utils/loginStatus";
-import UpdateEvent from "components/UpdateEvent/updateEvent";
 import "./App.sass";
+
+const EventDetails = lazy(() => import("components/EventDetails/EventDetails"));
+const UpdateEvent = lazy(() => import("components/UpdateEvent/updateEvent"));
+const UserEvents = lazy(() => import("components/UserEvents/UserEvents"));
+const AddEvent = lazy(() => import("components/AddEvent/AddEvent"));
+const Register = lazy(() => import("components/Register/Register"));
+const Login = lazy(() => import("components/Login/Login"));
+const NotFound = lazy(() => import("components/404/404"));
 
 const App: React.FC = () => {
 	const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false);
@@ -25,20 +26,28 @@ const App: React.FC = () => {
 	return (
 		<AppContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
 			<MainHeader></MainHeader>
-			<Routes>
-				<Route path="/" element={<Home />} />
-				<Route path="events">
-					<Route path="add" element={<AddEvent />} />
-					<Route path="my" element={<UserEvents />} />
-					<Route path="update/:id" element={<UpdateEvent />} />
-					<Route path="details/:id" element={<EventDetails />} />
-				</Route>
-				<Route path="auth">
-					<Route path="register" element={<Register />} />
-					<Route path="login" element={<Login />} />
-				</Route>
-				<Route path="*" element={<NotFound />} />
-			</Routes>
+			<Suspense
+				fallback={
+					<div className="loader">
+						<Spin size="large" className="loader" />
+					</div>
+				}
+			>
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="events">
+						<Route path="add" element={<AddEvent />} />
+						<Route path="my" element={<UserEvents />} />
+						<Route path="update/:id" element={<UpdateEvent />} />
+						<Route path="details/:id" element={<EventDetails />} />
+					</Route>
+					<Route path="auth">
+						<Route path="register" element={<Register />} />
+						<Route path="login" element={<Login />} />
+					</Route>
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+			</Suspense>
 		</AppContext.Provider>
 	);
 };
