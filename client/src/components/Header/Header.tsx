@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Layout, Menu, Avatar, Dropdown, Typography, message } from "antd";
 import { IMenuItem, menuItems } from "./config";
@@ -92,4 +92,4 @@ const MainHeader: React.FC = () => {
 	);
 };
 
-export default MainHeader;
+export default memo(MainHeader);
