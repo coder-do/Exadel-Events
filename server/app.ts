@@ -14,16 +14,25 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-	origin: 'http://localhost:3000',
-	credentials: true
+    origin: '*',
+    preflightContinue: true,
+    credentials: true
 }));
+// this also works
+// app.use(cors({
+//     origin: function (_, callback) {
+//         return callback(null, true);
+//     },
+//     optionsSuccessStatus: 200,
+//     credentials: true
+// }))
 app.use(session({
-	secret: process.env.SESSION_SECRET as string,
-	resave: false,
-	saveUninitialized: true,
-	cookie: {
-		expires: new Date(Date.now() + 3600000)
-	}
+    secret: process.env.SESSION_SECRET as string,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: new Date(Date.now() + 3600000)
+    }
 }));
 app.use(morgan("dev"));
 app.use(express.json());
@@ -36,9 +45,9 @@ app.use("/auth", usersRouter);
 app.use("/events", eventsRouter);
 
 mongoose.connect(process.env.MONGODB_URL as string)
-	.then(() => {
-		app.listen(process.env.PORT);
-	})
-	.catch((err: string) => new Error(err));
+    .then(() => {
+        app.listen(process.env.PORT);
+    })
+    .catch((err: string) => new Error(err));
 
 export default app;
